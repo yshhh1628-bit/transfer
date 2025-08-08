@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: transfer-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: transfer
+      MYSQL_USER: transfer
+      MYSQL_PASSWORD: transfer
+    ports:
+      - "3311:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./db/init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build: .
+    container_name: transfer-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3311/transfer?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+      SPRING_DATASOURCE_USERNAME: transfer
+      SPRING_DATASOURCE_PASSWORD: transfer
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+volumes:
+  mysql-data:
