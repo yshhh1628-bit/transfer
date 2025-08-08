@@ -38,10 +38,7 @@ public class Transaction extends BaseEntity {
     private BigDecimal amount;
 
     @Column(nullable = false)
-    private Long fee;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    private BigDecimal fee;
 
     private Long relatedAccountId;
 
@@ -57,9 +54,8 @@ public class Transaction extends BaseEntity {
                 .account(from)
                 .type(TransactionType.TRANSFER)
                 .amount(amount)
-                .fee(fee.longValue())
+                .fee(fee)
                 .relatedAccountId(to.getId())
-                .createdAt(createdAt)
                 .build();
     }
 
@@ -72,8 +68,7 @@ public class Transaction extends BaseEntity {
                 .account(account)
                 .type(TransactionType.WITHDRAW)
                 .amount(amount)
-                .fee(0L)
-                .createdAt(createdAt)
+                .fee(BigDecimal.ZERO)
                 .build();
     }
 

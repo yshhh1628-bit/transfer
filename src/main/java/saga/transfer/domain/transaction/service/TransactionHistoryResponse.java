@@ -16,7 +16,7 @@ public record TransactionHistoryResponse(
             String direction,
             String type,
             BigDecimal amount,
-            Long fee,
+            BigDecimal fee,
             Long counterpartyAccountId,
             LocalDateTime createdAt
     ) {}

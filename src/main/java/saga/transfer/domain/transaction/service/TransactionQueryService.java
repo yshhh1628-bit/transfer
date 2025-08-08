@@ -10,6 +10,7 @@ import saga.transfer.domain.transaction.Transaction;
 import saga.transfer.domain.transaction.TransactionRepository;
 import saga.transfer.domain.transaction.TransactionType;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -43,7 +44,7 @@ public class TransactionQueryService {
 
         String direction;
         Long counterpartyId = null;
-        Long fee = t.getFee() == null ? 0L : t.getFee();
+        BigDecimal fee = t.getFee() == null ? BigDecimal.ZERO : t.getFee();
 
         if (t.getType() == TransactionType.TRANSFER) {
             if (iAmOwner) {
@@ -52,7 +53,7 @@ public class TransactionQueryService {
             } else {
                 direction = "IN";
                 counterpartyId = t.getAccount().getId();
-                fee = 0L;
+                fee = BigDecimal.ZERO;
             }
         } else if (t.getType() == TransactionType.WITHDRAW) {
             direction = "OUT";

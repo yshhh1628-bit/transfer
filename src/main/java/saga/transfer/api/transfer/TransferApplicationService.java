@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 class TransferApplicationService {
-
     private final AccountDomainService accountDomainService;
     private final TransferLimitPolicy transferLimitPolicy;
     private final TransactionDomainService transactionDomainService;
@@ -32,7 +31,6 @@ class TransferApplicationService {
         transferLimitPolicy.validate(fromAccount, amount.add(fee), LocalDate.now());
 
         fromAccount.withdraw(amount.add(fee));
-
         toAccount.deposit(amount);
 
         transactionDomainService.save(
